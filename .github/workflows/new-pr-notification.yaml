@@ -1,0 +1,27 @@
+name: "[reusable] notify slack about new PR"
+
+on:
+  workflow_call:
+    secrets:
+      WEBHOOK_URL:
+        required: true
+
+jobs:
+  notifySlack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack on PR
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: |
+          if [ -z "${SLACK_WEBHOOK_URL}" ]; then
+            echo "SLACK_WEBHOOK_URL is not set"
+            exit 1
+          else
+            echo "SLACK_WEBHOOK_URL is set"
+          fi
+
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"A new pull request has been opened: *${PR_TITLE}* \\n<${PR_URL}|PR #${PR_NUMBER}>\"}" $SLACK_WEBHOOK_URL
