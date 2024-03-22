@@ -1,4 +1,4 @@
-name: "[reusable] notify slack about new PR"
+name: "[reusable] notify slack about stale PR"
 
 on:
   workflow_call:
@@ -25,10 +25,7 @@ jobs:
           PR_URL="${{ github.event.pull_request.html_url }}"
           PR_NUMBER="${{ github.event.pull_request.number }}"
           PR_CREATOR="${{ github.event.pull_request.user.login }}"
-          PR_CREATOR_NAME="${{ github.event.pull_request.user.name }}"
-          PR_DIFF_URL="${{ github.event.pull_request.diff_url }}"
-          REPO_NAME="${{ github.repository }}"
-          ORG_NAME="${{ github.event.pull_request.organization }}"
-          REPO_URL="${{ github.server_url }}/${{ github.repository }}"
-          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"A new pull request <${PR_URL}|\`${ORG_NAME}/${REPO_NAME}/#${PR_NUMBER}\`> has been opened by \`${PR_CREATOR}\`:\\n*${PR_TITLE}* \\n<${PR_URL}|View Pull Request> \\n<${REPO_URL}|View Repository> \\n<${PR_DIFF_URL}|Show Raw Diff>\"}" $SLACK_WEBHOOK_URL
+          PR_REPOSITORY_NAME="${{ github.repository }}"
+
+          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"Pull request <${PR_URL}|\`${PR_REPOSITORY_NAME}#${PR_NUMBER}: ${PR_TITLE}\`>  from \`${PR_CREATOR}\` needs some love, it\'s stale for \`3\` days\"}" $SLACK_WEBHOOK_URL
 
