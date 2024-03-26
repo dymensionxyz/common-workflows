@@ -22,8 +22,7 @@ jobs:
           fi
 
           PR_TITLE="${{ github.event.pull_request.title }}"
-          PR_TITLE_JSON=$(jq -nr --arg str "${{ github.event.pull_request.title }}" '$str')
-          PR_TITLE_ESCAPED=$(echo "$PR_TITLE" | sed 's/"/\\"/g')
+          PR_TITLE_ESCAPED=$(echo "$PR_TITLE" | sed 's/"//g')
           PR_URL="${{ github.event.pull_request.html_url }}"
           PR_NUMBER="${{ github.event.pull_request.number }}"
           PR_CREATOR="${{ github.event.pull_request.user.login }}"
@@ -32,4 +31,4 @@ jobs:
           REPO_NAME="${{ github.repository }}"
           ORG_NAME="${{ github.event.pull_request.organization }}"
           REPO_URL="${{ github.server_url }}/${{ github.repository }}"
-          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"A new pull request <${PR_URL}|\`${ORG_NAME}/${REPO_NAME}/#${PR_NUMBER}\`> has been opened by \`${PR_CREATOR}\`:\\n*${PR_TITLE_JSON}* \\n<${PR_URL}|View Pull Request> \\n<${REPO_URL}|View Repository> \\n<${PR_DIFF_URL}|Show Raw Diff>\"}" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"A new pull request <${PR_URL}|\`${ORG_NAME}/${REPO_NAME}/#${PR_NUMBER}\`> has been opened by \`${PR_CREATOR}\`:\\n*${PR_TITLE_ESCAPED}* \\n<${PR_URL}|View Pull Request> \\n<${REPO_URL}|View Repository> \\n<${PR_DIFF_URL}|Show Raw Diff>\"}" $SLACK_WEBHOOK_URL
