@@ -29,5 +29,5 @@ jobs:
           REPO_NAME="${{ github.repository }}"
           ORG_NAME="${{ github.event.pull_request.organization }}"
           REPO_URL="${{ github.server_url }}/${{ github.repository }}"
-          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"A new pull request <${PR_URL}|\`${ORG_NAME}/${REPO_NAME}/#${PR_NUMBER}\`> has been opened by \`${PR_CREATOR}\`:\\n*${{ github.event.pull_request.title }}* \\n<${PR_URL}|View Pull Request> \\n<${REPO_URL}|View Repository> \\n<${PR_DIFF_URL}|Show Raw Diff>\"}" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' -d "{\"text\": \"A new pull request <${PR_URL}|\`${ORG_NAME}/${REPO_NAME}/#${PR_NUMBER}\`> has been opened by \`${PR_CREATOR}\`:\\n<${PR_URL}|View Pull Request> \\n<${REPO_URL}|View Repository> \\n<${PR_DIFF_URL}|Show Raw Diff>\"}" $SLACK_WEBHOOK_URL
         shell: bash
